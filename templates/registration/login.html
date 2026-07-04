@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login | Employee Management System{% endblock %}
+
+{% block auth_content %}
+<div class="ems-login-wrapper d-flex align-items-center justify-content-center">
+    <div class="card ems-login-card shadow-lg border-0">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+                <div class="ems-login-icon mb-3">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <h3 class="fw-bold text-primary">Employee Management System</h3>
+                <p class="text-muted">Sign in to access your dashboard</p>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Invalid username or password. Please try again.
+                </div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label fw-semibold">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter username" required autofocus>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="id_password" class="form-label fw-semibold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password" class="form-control" id="id_password" placeholder="Enter password" required>
+                    </div>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

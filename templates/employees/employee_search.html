@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Search Employees | EMS{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-search text-primary me-2"></i>Search Employees</h2>
+    <p class="text-muted mb-0">Search by Employee ID, Name, or Department.</p>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control" placeholder="Search by Employee ID, Name, or Department..." value="{{ query }}" autofocus>
+                </div>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if query %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-muted mb-0">
+            {{ result_count }} result{{ result_count|pluralize }} found for "<span class="fw-semibold">{{ query }}</span>"
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            {% if page_obj.object_list %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Joining Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in page_obj.object_list %}
+                        <tr>
+                            <td><span class="badge bg-primary-subtle text-primary">{{ employee.employee_id }}</span></td>
+                            <td class="fw-semibold">{{ employee.name }}</td>
+                            <td>{{ employee.email }}</td>
+                            <td><span class="badge bg-secondary-subtle text-secondary">{{ employee.get_department_display }}</span></td>
+                            <td>{{ employee.designation }}</td>
+                            <td>{{ employee.joining_date|date:"M d, Y" }}</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'employee_update' employee.pk %}" class="btn btn-outline-secondary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-outline-danger" title="Delete" data-confirm="Are you sure you want to delete {{ employee.name }}?">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+            <div class="d-flex justify-content-center py-3">
+                <nav aria-label="Search result pagination">
+                    <ul class="pagination mb-0">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i></a></li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if num == page_obj.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}"><i class="bi bi-chevron-right"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+                <p class="text-muted mt-2">No employees matched your search.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-search fs-1"></i>
+        <p class="mt-2">Enter a search term above to find employees.</p>
+    </div>
+{% endif %}
+{% endblock %}

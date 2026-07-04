@@ -1,0 +1,230 @@
+:root {
+    --ems-primary: #0d47a1;
+    --ems-primary-light: #1565c0;
+    --ems-primary-dark: #0a3880;
+    --ems-accent: #2196f3;
+    --ems-sidebar-width: 250px;
+    --ems-bg: #f4f7fb;
+}
+
+* {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--ems-bg);
+    margin: 0;
+}
+
+/* Navbar */
+.ems-navbar {
+    background: linear-gradient(90deg, var(--ems-primary) 0%, var(--ems-primary-light) 100%);
+    box-shadow: 0 2px 10px rgba(13, 71, 161, 0.15);
+    z-index: 1030;
+}
+
+/* Layout */
+.ems-layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+}
+
+.ems-sidebar {
+    width: var(--ems-sidebar-width);
+    background-color: #fff;
+    border-right: 1px solid #e5e9f0;
+    padding: 1.25rem 0.75rem;
+    flex-shrink: 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+.ems-sidebar .nav-link {
+    color: #495467;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.15s ease;
+}
+
+.ems-sidebar .nav-link i {
+    font-size: 1.1rem;
+}
+
+.ems-sidebar .nav-link:hover {
+    background-color: #eaf1fc;
+    color: var(--ems-primary);
+}
+
+.ems-sidebar .nav-link.active {
+    background-color: var(--ems-primary);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(13, 71, 161, 0.25);
+}
+
+.ems-main {
+    flex-grow: 1;
+    padding: 1.75rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Messages */
+.ems-messages {
+    margin-bottom: 1rem;
+}
+
+/* Stat cards */
+.ems-stat-card, .ems-action-card {
+    border-radius: 14px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ems-stat-card:hover, .ems-action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.12) !important;
+}
+
+.ems-stat-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Cards general */
+.card {
+    border-radius: 14px;
+}
+
+.card-header {
+    border-radius: 14px 14px 0 0 !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--ems-primary);
+    border-color: var(--ems-primary);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--ems-primary-dark);
+    border-color: var(--ems-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--ems-primary);
+    border-color: var(--ems-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--ems-primary);
+    border-color: var(--ems-primary);
+}
+
+/* Table */
+.table thead th {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #6b7488;
+    border-bottom-width: 1px;
+}
+
+.ems-sort-link {
+    color: #6b7488;
+    text-decoration: none;
+}
+
+.ems-sort-link:hover {
+    color: var(--ems-primary);
+}
+
+/* Pagination */
+.page-link {
+    color: var(--ems-primary);
+}
+
+.page-item.active .page-link {
+    background-color: var(--ems-primary);
+    border-color: var(--ems-primary);
+}
+
+/* Login page */
+.ems-login-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--ems-primary) 0%, #1976d2 50%, var(--ems-accent) 100%);
+    padding: 1rem;
+}
+
+.ems-login-card {
+    width: 100%;
+    max-width: 440px;
+    border-radius: 18px;
+}
+
+.ems-login-icon {
+    width: 70px;
+    height: 70px;
+    background-color: #eaf1fc;
+    color: var(--ems-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto;
+}
+
+/* Footer */
+.ems-footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    text-align: center;
+    color: #8a93a6;
+    font-size: 0.85rem;
+}
+
+/* Loading spinner overlay */
+.ems-spinner-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Responsive sidebar */
+@media (max-width: 991.98px) {
+    .ems-sidebar {
+        position: fixed;
+        left: 0;
+        top: 56px;
+        transform: translateX(-100%);
+        z-index: 1020;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+    .ems-sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+.badge.bg-primary-subtle {
+    background-color: #e3ecfa !important;
+}
+.badge.bg-secondary-subtle {
+    background-color: #eef0f3 !important;
+}

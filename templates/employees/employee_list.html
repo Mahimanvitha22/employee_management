@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Employees | EMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold mb-1">Employees</h2>
+        <p class="text-muted mb-0">{{ total_employees }} employee{{ total_employees|pluralize }} total</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'employee_search' %}" class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Search
+        </a>
+        <a href="{% url 'employee_add' %}" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Add Employee
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        {% if page_obj.object_list %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th><a class="ems-sort-link" href="?sort={% if current_sort == 'employee_id' %}-{% endif %}employee_id">Employee ID <i class="bi bi-arrow-down-up small"></i></a></th>
+                        <th><a class="ems-sort-link" href="?sort={% if current_sort == 'name' %}-{% endif %}name">Name <i class="bi bi-arrow-down-up small"></i></a></th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th><a class="ems-sort-link" href="?sort={% if current_sort == 'department' %}-{% endif %}department">Department <i class="bi bi-arrow-down-up small"></i></a></th>
+                        <th>Designation</th>
+                        <th><a class="ems-sort-link" href="?sort={% if current_sort == 'salary' %}-{% endif %}salary">Salary <i class="bi bi-arrow-down-up small"></i></a></th>
+                        <th><a class="ems-sort-link" href="?sort={% if current_sort == 'joining_date' %}-{% endif %}joining_date">Joining Date <i class="bi bi-arrow-down-up small"></i></a></th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in page_obj.object_list %}
+                    <tr>
+                        <td><span class="badge bg-primary-subtle text-primary">{{ employee.employee_id }}</span></td>
+                        <td class="fw-semibold">{{ employee.name }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.phone }}</td>
+                        <td><span class="badge bg-secondary-subtle text-secondary">{{ employee.get_department_display }}</span></td>
+                        <td>{{ employee.designation }}</td>
+                        <td>${{ employee.salary|floatformat:2 }}</td>
+                        <td>{{ employee.joining_date|date:"M d, Y" }}</td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'employee_update' employee.pk %}" class="btn btn-outline-secondary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-outline-danger" title="Delete" data-confirm="Are you sure you want to delete {{ employee.name }}?">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="d-flex justify-content-center py-3">
+            <nav aria-label="Employee pagination">
+                <ul class="pagination mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1&sort={{ current_sort }}"><i class="bi bi-chevron-double-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}"><i class="bi bi-chevron-left"></i></a>
+                        </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}&sort={{ current_sort }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}"><i class="bi bi-chevron-right"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&sort={{ current_sort }}"><i class="bi bi-chevron-double-right"></i></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted"></i>
+            <p class="text-muted mt-2">No employees found.</p>
+            <a href="{% url 'employee_add' %}" class="btn btn-primary btn-sm">Add your first employee</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
